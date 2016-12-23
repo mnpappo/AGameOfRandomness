@@ -1,5 +1,8 @@
 package com.java_final_project;
+
 import java.util.Scanner;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
 
@@ -25,17 +28,19 @@ public class Main {
     public static int currentState;  // the current state of the game
 
     public static int currentPlayer; // the current player (TRIANGLE or BOX or CIRCLE)
-    public static int currntRow, currentCol; // current seed's row and column
+    public static int currentRow, currentCol; // current seed's row and column
 
     public static Scanner in = new Scanner(System.in); // the input Scanner
+    public static Random random = new Random();
 
     public static void main(String[] args) {
+        int iteration = 0;
         // Initialize the game-board and current status
         initGame();
         // Play the game once
         do {
             playerMove(currentPlayer); // update currentRow and currentCol
-            updateGame(currentPlayer, currntRow, currentCol); // update currentState
+            updateGame(currentPlayer, currentRow, currentCol); // update currentState
             printBoard();
             // Print message if game-over
             if (currentState == TRIANGLE_WON) {
@@ -51,7 +56,7 @@ public class Main {
 
             // Switch players
             if (currentPlayer == TRIANGLE) {
-                System.out.println("Next Player's turn + BOX");
+                System.out.println("Next Player's turn BOX");
                 currentPlayer = BOX;
             } else if (currentPlayer == BOX) {
                 System.out.println("Next Player's turn CIRCLE");
@@ -59,6 +64,17 @@ public class Main {
             } else if (currentPlayer == CIRCLE) {
                 System.out.println("Next Player's turn TRIANGLE");
                 currentPlayer = TRIANGLE;
+            }
+
+            // show the iteration number
+            System.out.println("Iteration number: " + (iteration+1));
+            iteration += 1;
+
+            // just slow out the input to see what happen
+            try {
+                Thread.sleep(1000);
+            } catch(InterruptedException ex) {
+                Thread.currentThread().interrupt();
             }
 
         } while (currentState == PLAYING); // repeat if not game-over
@@ -87,12 +103,20 @@ public class Main {
             } else {
                 System.out.print("Player '(C)IRCLE', enter your move (row[0-9] column[0-9]): ");
             }
-            int row = in.nextInt();
-            int col = in.nextInt();
+            // manual input
+            // int row = in.nextInt();
+            // int col = in.nextInt();
+
+            // random input from 0 to 9 range
+            int row = random.nextInt(9);
+            System.out.println(row);
+            int col = random.nextInt(9);
+            System.out.println(col);
+
             if (row >= 0 && row < ROWS && col >= 0 && col < COLS && board[row][col] == EMPTY) {
-                currntRow = row;
+                currentRow = row;
                 currentCol = col;
-                board[currntRow][currentCol] = theSeed;  // update game-board content
+                board[currentRow][currentCol] = theSeed;  // update game-board content
                 validInput = true;  // input okay, exit loop
             } else {
                 System.out.println("This move at (" + (row) + "," + (col) + ") is not valid. Try again...");
