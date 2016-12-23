@@ -33,7 +33,14 @@ public class Main {
     public static Scanner in = new Scanner(System.in); // the input Scanner
     public static Random random = new Random();
 
+    // get random wining cell
+    public static int winRow = random.nextInt(9);
+    public static int winCol = random.nextInt(9);
+
     public static void main(String[] args) {
+
+
+        // count iterations
         int iteration = 0;
         // Initialize the game-board and current status
         initGame();
@@ -44,14 +51,14 @@ public class Main {
             printBoard();
             // Print message if game-over
             if (currentState == TRIANGLE_WON) {
-                System.out.println("'TRIANGLE' won! Bye!");
+                System.out.println("'TRIANGLE' won!");
             } else if (currentState == BOX_WON) {
                 System.out.println("'BOX' won! Bye!");
             } else if (currentState == CIRCLE_WON) {
-                System.out.println("'CIRCLE' won! Bye");
+                System.out.println("'CIRCLE' won!");
             }
             else if (currentState == DRAW) {
-                System.out.println("It's a Draw! Bye!");
+                System.out.println("It's a Draw!");
             }
 
             // Switch players
@@ -69,6 +76,7 @@ public class Main {
             // show the iteration number
             System.out.println("Iteration number: " + (iteration+1));
             iteration += 1;
+            System.out.println("Winning cell is (" + winRow + "," + winCol + ")");
 
             // just slow out the input to see what happen
             try {
@@ -79,6 +87,7 @@ public class Main {
 
         } while (currentState == PLAYING); // repeat if not game-over
     }
+
 
     /** Initialize the game-board contents and the current states */
     public static void initGame() {
@@ -109,9 +118,8 @@ public class Main {
 
             // random input from 0 to 9 range
             int row = random.nextInt(9);
-            System.out.println(row);
             int col = random.nextInt(9);
-            System.out.println(col);
+            System.out.println("(" + row + "," + col + ")");
 
             if (row >= 0 && row < ROWS && col >= 0 && col < COLS && board[row][col] == EMPTY) {
                 currentRow = row;
@@ -159,7 +167,9 @@ public class Main {
     /** Return true if the player with "theSeed" has won after placing at
      (currentRow, currentCol) */
     public static boolean hasWon(int theSeed, int currentRow, int currentCol) {
-        return false;
+        if (winRow==currentRow && winCol==currentCol) {
+            return true;
+        } else return false;
     }
 
     /** Print the game board */
