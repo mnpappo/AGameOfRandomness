@@ -1,8 +1,11 @@
 package com.java_final_project;
 
+/**
+ * Created by mnpappo on 12/23/16.
+ */
+
 import java.util.Scanner;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 public class Main {
 
@@ -34,8 +37,21 @@ public class Main {
     public static Random random = new Random();
 
     // get random wining cell
-    public static int winRow = random.nextInt(9);
-    public static int winCol = random.nextInt(9);
+    public static final int winRow = random.nextInt(9);
+    public static final int winCol = random.nextInt(9);
+
+    public static int prev1Row=EMPTY;
+    public static int prev1Col=EMPTY;
+
+    public static int prev2Row=EMPTY;
+    public static int prev2Col=EMPTY;
+
+    public static int prev3Row=EMPTY;
+    public static int prev3Col=EMPTY;
+
+
+
+
 
     public static void main(String[] args) {
 
@@ -49,17 +65,6 @@ public class Main {
             playerMove(currentPlayer); // update currentRow and currentCol
             updateGame(currentPlayer, currentRow, currentCol); // update currentState
             printBoard();
-            // Print message if game-over
-            if (currentState == TRIANGLE_WON) {
-                System.out.println("'TRIANGLE' won!");
-            } else if (currentState == BOX_WON) {
-                System.out.println("'BOX' won! Bye!");
-            } else if (currentState == CIRCLE_WON) {
-                System.out.println("'CIRCLE' won!");
-            }
-            else if (currentState == DRAW) {
-                System.out.println("It's a Draw!");
-            }
 
             // Switch players
             if (currentPlayer == TRIANGLE) {
@@ -71,6 +76,18 @@ public class Main {
             } else if (currentPlayer == CIRCLE) {
                 System.out.println("Next Player's turn TRIANGLE");
                 currentPlayer = TRIANGLE;
+            }
+
+            // Print message if game-over
+            if (currentState == TRIANGLE_WON) {
+                System.out.println("'TRIANGLE' won!");
+            } else if (currentState == BOX_WON) {
+                System.out.println("'BOX' won! Bye!");
+            } else if (currentState == CIRCLE_WON) {
+                System.out.println("'CIRCLE' won!");
+            }
+            else if (currentState == DRAW) {
+                System.out.println("It's a Draw!");
             }
 
             // show the iteration number
@@ -119,12 +136,26 @@ public class Main {
             // random input from 0 to 9 range
             int row = random.nextInt(9);
             int col = random.nextInt(9);
+
             System.out.println("(" + row + "," + col + ")");
 
             if (row >= 0 && row < ROWS && col >= 0 && col < COLS && board[row][col] == EMPTY) {
                 currentRow = row;
                 currentCol = col;
+
+                // update prevprev cell
+                board[prev3Row][prev3Col] = EMPTY;
                 board[currentRow][currentCol] = theSeed;  // update game-board content
+
+                prev3Row = prev2Row;
+                prev3Col = prev2Col;
+
+                prev2Row = prev1Row;
+                prev2Col = prev1Col;
+
+                prev1Row = currentRow;
+                prev1Col = currentCol;
+
                 validInput = true;  // input okay, exit loop
             } else {
                 System.out.println("This move at (" + (row) + "," + (col) + ") is not valid. Try again...");
@@ -151,17 +182,9 @@ public class Main {
         // Otherwise, no change to currentState (still PLAYING)
     }
 
-    /** Return true if it is a draw (no more empty cell) */
-    // TODO: Shall declare draw if no player can "possibly" win
+    /** Return true if it is a draw */
     public static boolean isDraw() {
-        for (int row = 0; row < ROWS; ++row) {
-            for (int col = 0; col < COLS; ++col) {
-                if (board[row][col] == EMPTY) {
-                    return false;  // an empty cell found, not draw, exit
-                }
-            }
-        }
-        return true;  // no empty cell, it's a draw
+        return false;
     }
 
     /** Return true if the player with "theSeed" has won after placing at
@@ -189,9 +212,9 @@ public class Main {
         System.out.println();
     }
 
-    /** Print a cell with the specified "content" */
-    public static void printCell(int content) {
-        switch (content) {
+    /** Print a cell with the specified "symbol" */
+    public static void printCell(int symbol) {
+        switch (symbol) {
             case EMPTY:  System.out.print("   "); break;
             case TRIANGLE: System.out.print(" T "); break;
             case BOX:  System.out.print(" B "); break;
