@@ -1,5 +1,7 @@
 package com.java_final_project;
 
+import java.io.*;
+import javax.sound.sampled.*;
 import java.util.Random;
 
 /**
@@ -38,7 +40,7 @@ public class Players {
         if (currentState == TRIANGLE_WON_STATUS) {
             System.out.println("'TRIANGLE' won!");
         } else if (currentState == BOX_WON_STATUS) {
-            System.out.println("'BOX' won! Bye!");
+            System.out.println("'BOX' won!");
         } else if (currentState == CIRCLE_WON_STATUS) {
             System.out.println("'CIRCLE' won!");
         }
@@ -47,6 +49,26 @@ public class Players {
         } else {
             return false;
         }
+
+        // play win sound
+        try {
+            AudioInputStream inputStream = AudioSystem.getAudioInputStream(new File("testAudio.wav"));
+            final Clip testAudio = AudioSystem.getClip();
+
+            testAudio.open(inputStream);
+            testAudio.start();
+
+            //wait to the audio finish (I didn't find any better)
+            while (!testAudio.isRunning())
+                Thread.sleep(10);
+            while (testAudio.isRunning())
+                Thread.sleep(10);
+
+            testAudio.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
         return true;
 
     }

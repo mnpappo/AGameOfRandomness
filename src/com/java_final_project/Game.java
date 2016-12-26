@@ -8,7 +8,7 @@ public class Game {
 
     public int KEEP_PLAYING = 0;
 
-    Game(Board board, Players player) {
+    Game(Board board, Players player, PlayerMove playerMove) {
         for (int row = 0; row < board.ROWS; ++row) {
             for (int col = 0; col < board.COLS; ++col) {
                 board.grid[row][col] = 0;  // all cells empty
@@ -16,6 +16,7 @@ public class Game {
         }
         board.cellObject = KEEP_PLAYING; // ready to play
         board.currentPlayer = player.TRIANGLE;  // TRIANGLE plays first, next BOX, next CIRCLE
+
     }
 
     public void SwitchPlayer(Board board, Players player) {
@@ -43,6 +44,7 @@ public class Game {
             } else if (theSeed == player.CIRCLE) {
                 board.cellObject = player.CIRCLE_WON_STATUS;
             }
+
         } else if (playerMove.isDraw()) { // check if this move is draw
             board.cellObject = player.DRAW_STATUS;
         }
