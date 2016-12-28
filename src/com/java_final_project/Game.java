@@ -7,6 +7,7 @@ package com.java_final_project;
 public class Game {
 
     public int KEEP_PLAYING = 0;
+    public int iterations = 1;
 
     Game(Board board, Players player, PlayerMove playerMove) {
         for (int row = 0; row < board.ROWS; ++row) {
@@ -33,7 +34,9 @@ public class Game {
         }
     }
 
-    /**  */
+    /**
+     *
+     * */
     public void UpdateStatus(Board board, Players player, PlayerMove playerMove, int theSeed, int currentRow, int currentCol) {
         if (player.HasWon(currentRow, currentCol)) { //check if won
             // set cellObject that won

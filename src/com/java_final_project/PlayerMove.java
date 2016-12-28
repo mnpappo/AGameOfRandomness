@@ -64,7 +64,7 @@ public class PlayerMove {
 
     /** Player with the "theSeed" makes one move, with input validation.
      Update global variables "currentRow" and "currentCol". */
-    public void Move(Board board, Players player, PlayerMove playerMove) {
+    public void Move(Board board, Players player, PlayerMove playerMove, Game game) {
         boolean validInput = false;  // for input validation
         do {
             if (board.currentPlayer == player.TRIANGLE) {
@@ -93,6 +93,8 @@ public class PlayerMove {
                 board.currentCol = col;
 
                 if (checkMoveAbility(board, player, playerMove)) {
+
+                    game.iterations += 1;
 
                     // update prevprev cell, to keep 3 players footstep only
                     board.grid[playerMove.prev3Row][playerMove.prev3Col] = EMPTY;
@@ -128,32 +130,91 @@ public class PlayerMove {
     boolean checkMoveAbility(Board board, Players player, PlayerMove playerMove) {
 
         if (board.currentPlayer == player.TRIANGLE) {
+            // only diagonal move
 
-//            System.out.println(playerMove.prev3Row + " --- i --- " + playerMove.prev3Col);
-//
-//            for (int i = playerMove.prev3Row+1; i <= 9; i++) { //for every next row
-//                System.out.println("testing for i =" + i);
-//                if (i == board.currentRow) {
-//                    System.out.println("got next row " + i);
-//
-//                    for (int j = playerMove.prev3Col+1; j <= board.currentCol; j++) {
-//                        System.out.println("testing every " + j + "for " + i);
-//                        if (j == i-1) {
-//                            System.out.println("got next col "+ j);
-//                            return true;
-//                        }
-//                    }
-//                } else return false;
-//
-//            }
-//
-//
-//            System.out.println("number error!");
-            return true;
+            // get previous position of triangle
+            int previousNumber = Integer.parseInt(playerMove.prev3Row + "" + playerMove.prev3Col);
+            // get next position of triangle
+            int nextNumber = Integer.parseInt(board.currentRow + "" + board.currentCol);
+
+            boolean flag = false;
+
+            // from left corner to most right corner against current position of triangle
+            if (flag == false) {
+                if (flag==false) {
+                    for (int i = previousNumber; i <= 99; i+=11) {
+                        if (i == nextNumber) {
+                            flag = true;
+                            break;
+                        } else flag=false;
+                    }
+                }
+                if (flag==false) {
+                    for (int i = previousNumber; i >= 0; i-=11) {
+                        if (i == nextNumber) {
+                            flag = true;
+                            break;
+                        } else flag=false;
+                    }
+                }
+            }
+            if (flag == false) {
+                // from right corner to most left corner against current position of triangle
+                if (flag == false){
+                    for (int i = previousNumber; i <= 99; i+=9) {
+                        if (i == nextNumber) {
+                            flag = true;
+                            break;
+                        } else flag=false;
+                    }
+                }
+                if (flag==false) {
+                    for (int i = previousNumber; i >= 0; i-=9) {
+                        if (i == nextNumber) {
+                            flag = true;
+                            break;
+                        } else flag=false;
+                    }
+                }
+            }
+
+
+            // else return false
+            return flag;
+
+
 
         } else if (board.currentPlayer == player.BOX) {
             // only left, right, up, down
-            return true;
+
+            // get next position of box
+            int nextNumber = Integer.parseInt(board.currentRow + "" + board.currentCol);
+
+            boolean flag = false;
+
+
+            // row wise check, starts from 1st row to last
+            if (flag==false) {
+                for (int i = Integer.parseInt(playerMove.prev3Row+""+0); i <= Integer.parseInt(playerMove.prev3Row+""+9); i+=1) {
+                    if (i == nextNumber) {
+                        flag = true;
+                        break;
+                    } else flag=false;
+                }
+                System.out.println(flag);
+            }
+            if (flag == false){
+                // column wise check, starts from 1st col to last
+                for (int i = playerMove.prev3Col; i <= Integer.parseInt(9+""+playerMove.prev3Col); i+=10) {
+                    if (i == nextNumber) {
+                        flag = true;
+                        break;
+                    } else flag=false;
+                }
+            }
+
+            // else return false
+            return flag;
         } else if (board.currentPlayer == player.CIRCLE) {
             // can move any way
             return true;

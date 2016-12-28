@@ -20,20 +20,19 @@ public class Main {
         Game game = new Game(board, player, playerMove);
 
         // count iterations
-        int iterations = 1;
 
         // Start playing game
         do {
 
-            if (iterations <= 3) { // initial move of three player at (0,0) cell
+            if (game.iterations <= 3) { // initial move of three player at (0,0) cell
                 playerMove.Move(playerMove, board, 0, 0);
                 // show the iteration number
-                System.out.println("Initial Iteration number: " + (iterations) + " at cell (0,0) for player: " + board.currentPlayer);
-                iterations += 1;
+                System.out.println("Initial Iteration number: " + (game.iterations) + " at cell (0,0) for player: " + board.currentPlayer);
+                game.iterations += 1;
                 // switch player
                 game.SwitchPlayer(board, player);
             } else { //// take input for the move(until find valid move), move the player to the current cell
-                playerMove.Move(board, player, playerMove);
+                playerMove.Move(board, player, playerMove, game);
 
                 // update game status if win else keep playing
                 game.UpdateStatus(board, player, playerMove, board.currentPlayer, board.currentRow, board.currentCol);
@@ -47,8 +46,8 @@ public class Main {
                 System.out.println("Winning cell is (" + player.winRow + "," + player.winCol + ")");
 
                 // show the iteration number
-                System.out.println("Iteration number: " + (iterations));
-                iterations += 1;
+                System.out.println("Iteration number: " + (game.iterations));
+//                iterations += 1;
 
 
                 // after win, ask for trace
@@ -70,7 +69,7 @@ public class Main {
                 }
 
                 try { // just slow to see what happen
-                    Thread.sleep(100);
+                    Thread.sleep(10);
                 } catch(InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
